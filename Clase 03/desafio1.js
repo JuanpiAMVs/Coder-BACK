@@ -4,6 +4,10 @@ class ProductManager {
     }
 
     addProduct(title, description, price, thumbnail, code, stock){
+        if(!title || !description || !price || !thumbnail || !code ||!stock ){
+            console.log("Faltan argumentos al agregar producto")
+            return
+        }
         const product = {
             title: title,
             description: description,
@@ -37,6 +41,5 @@ class ProductManager {
     }
 
 let productos = new ProductManager()
-productos.addProduct("mondongo","asdkjashdak", 12312, "/f:asdsad/asdas", "21a", 1 )
-productos.addProduct("mondongo","asdkjashdak", 12312, "/f:asdsad/asdas", "2a", 1 )
+productos.addProduct("mondongo","asdkjashdak", 12312, "/f:asdsad/asdas", "21a" )
 productos.getProducts()
