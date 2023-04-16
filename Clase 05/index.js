@@ -16,8 +16,8 @@ const context = async () => {
     };
 /*     await productManager.addProduct(testProduct);
     await productManager.getProductById(1) */
-/*     await productManager.updateProduct(1, "title", "asdasdsadasd") */
-        await productManager.deleteProduct(2)
+    await productManager.updateProduct(1, {title: "quesito"})
+/*         await productManager.deleteProduct(2) */
   } catch (err) {
     console.log(err);
   }

@@ -72,22 +72,23 @@ export default class ProductManager {
     }
   }
 
-  async updateProduct(id, atribute, value) {
+  async updateProduct(id, update) {
     try {
-      if (!id || !atribute || !value) {
+      if (!id || !update) {
         console.log("Faltan argumentos");
         return;
       }
       const products = await this.getProducts();
       const indexFind = products.findIndex((product) => product.id === id);
-      const productSelected = products[indexFind];
-      const productUpdate = (productSelected[atribute] = value);
+      const productUpdate = {...products[indexFind], ...update}
+      products[indexFind] = productUpdate
       const writeProducts = await fs.promises.writeFile(
         this.path,
         JSON.stringify(products, null, "\t")
       );
       console.log("Producto agregado y actualizado");
-      return productUpdate;
+      console.log(products[indexFind])
+      return products[indexFind];
     } catch (err) {
       console.log(err);
     }
