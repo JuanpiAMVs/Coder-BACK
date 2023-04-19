@@ -5,14 +5,14 @@ const app = express()
 const ProductsManager = new ProductManager('products.json')
 
 app.get('/products', async (req, res) => {
-    const query = req.query
-    const search = Object.keys(query)[0]
-    const value = Object.values(query)[0]
+    const { limit } = req.query
     const products = await ProductsManager.getProducts()
-    if(search == 'limit')  return res.send(products.slice(0, value))
-    res.send(products)
+    if(limit) {
+        return res.json(await products.slice(0, limit))
+    } 
+    res.json(products)
 
-})
+});
 
 app.get('/products/:pid', async (req, res) => {
     const params = req.params
