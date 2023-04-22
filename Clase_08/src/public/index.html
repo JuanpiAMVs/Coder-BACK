@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>Bienvenido</h1>
+<!--         <form action="/api/products" method="post">  //URL ENCODED
+            <label for="Nombre"></label>
+            <input name="name">
+            <label>Especie</label>
+            <input name="especie">
+            <input type="submit">
+        </form> -->
+
+        <form action="/api/products" method="post" enctype="multipart/form-data">     <!-- para enviar fotos porque a traves de json no se puede enviar -->
+            <label for="Nombre"></label>
+            <input name="name">
+            <label>Especie</label>
+            <input name="especie">
+            <label>Imagen</label>
+            <input type="file" name="image">
+            <input type="submit">
+        </form>
+    </div>
+    
+</body>
+</html>
