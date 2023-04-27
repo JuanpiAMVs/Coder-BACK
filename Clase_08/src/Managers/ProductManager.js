@@ -26,7 +26,11 @@ export default class ProductManager {
         return {status: "error", data:`El codigo ${findCode.code} ya se encuentra ocupado`};
       } else {
         product.status = true
-        product.thumbnails = []
+        
+        if(product.thumbnails.length === 0) {
+          product.thumbnails = []
+        }
+
         product.id =
           products.length > 0 ? products[products.length - 1].id + 1 : 1;
         products.push(product);
@@ -58,14 +62,14 @@ export default class ProductManager {
   async getProductById(id) {
     try {
       if (!id) {
-        return {status: "error", data:"Falta ingresar ID"};
+        return {status: "error", message:"Falta ingresar ID"};
       }
       const products = await this.getProducts();
-      if(products.status === "error") return {status: "error", data: products.data}
+      if(products.status === "error") return {status: "error", message: products.data}
 
       const findProduct = products.find((products) => products.id == id);
       if (!findProduct) {
-        return {status: "error", data: `El producto con el ID ${id} no se ha encontrado`};
+        return {status: "error", message: `El producto con el ID ${id} no se ha encontrado`};
       }
       return findProduct;
     } catch (error) {

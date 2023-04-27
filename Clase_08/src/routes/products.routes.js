@@ -8,6 +8,12 @@ const ProductsManager = new ProductManager('productos.json')
 
 router.get('/', async (req, res) => {
     const { limit } = req.query
+    if(isNaN(limit)){
+        return res.status(400).send({data:{status: "error", message: `${limit} is not a number`}})
+    }
+    if(limit < 0) {
+        return res.status(400).send({data: {status: "error", message: `${limit} It has to be a positive number` }})
+    }
     const products = await ProductsManager.getProducts()
     if(products.status === "error") return res.status(400).send({products})
     if(limit) {
@@ -20,7 +26,7 @@ router.get('/', async (req, res) => {
 router.get('/:pid', async (req, res) => {
     const params = req.params
     const product = await ProductsManager.getProductById(params.pid)
-    if(product.status === "error") return res.status(400).send({product}) 
+    if(product.status === "error") return res.status(400).send({data: {status: "error", message: product.message}}) 
     res.status(200).send({product})
 })
 

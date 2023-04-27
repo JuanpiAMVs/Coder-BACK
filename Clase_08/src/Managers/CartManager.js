@@ -62,34 +62,29 @@ export default class CartManager {
     }
   }
 
-async addProductToCart(cid, pid){
-  try{
+async addProductToCart(cid, pid, quantity = 1){
+  try{ //argumentos
     if (!cid || !pid) {
       return {status: "error", data: "Faltan argumentos"};
     }
+    //obtener carrito
     const GetCarts =  await this.getCarts()
     if(GetCarts.status === "error") return {status: "error", data: GetCarts.data}
-
     const indexFind = GetCarts.findIndex((cart) => cart.id == cid);
-    if(indexFind == -1) return {status: "error", data: "Product target not found"}
+    if(indexFind == -1) return {status: "error", data: "Cart target not found"}
 
     const GetProduct = await ProductsManager.getProductById(pid)
-    if(GetProduct.status === "error") return {status: "error", data: GetProduct.data}
-
-    const product = GetProduct.id
-    const quantity = 1
-    const repeatedProduct = GetCarts[indexFind].products.findIndex((p) => p.product == product)
-    if(repeatedProduct != 1){
+    if(GetProduct.status === "error") return {status: "error", message: GetProduct.message}
+  
+    const repeatedProduct = GetCarts[indexFind].products.findIndex((p) => p.product == pid)
+    console.log(repeatedProduct)
+    if(repeatedProduct != -1){
       GetCarts[indexFind].products[repeatedProduct].quantity += quantity;
     }else{
-      GetCarts[indexFind].products.push({ product, quantity })
+      GetCarts[indexFind].products.push({ product:pid, quantity })
     }
-    console.log(repeatedProduct)
   
-    const writeProducts = await fs.promises.writeFile(
-      this.path,
-      JSON.stringify(GetCarts, null, "\t")
-    );
+    const writeProducts = await fs.promises.writeFile(this.path,JSON.stringify(GetCarts, null, "\t"));
     console.log("Producto agregado y carrito actualizado");
     console.log(GetCarts[indexFind])
     return GetCarts[indexFind];
