@@ -1,0 +1,318 @@
+/*custom font*/
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+/*basic reset*/
+* {margin: 0; padding: 0;}
+
+html {
+	height: 100%;
+	/*Image only BG fallback*/
+	
+	/*background = gradient + image pattern combo*/
+	background: 
+		linear-gradient(rgba(196, 102, 0, 0.6), rgba(155, 89, 182, 0.6));
+}
+
+body {
+	font-family: montserrat, arial, verdana;
+}
+.forms {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+/*form styles*/
+#msform {
+	width: 400px;
+	margin: 50px auto;
+	text-align: center;
+	position: relative;
+}
+#msform2 {
+	width: 400px;
+	margin: 50px auto;
+	text-align: center;
+	position: relative;
+}
+#msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	
+	/*stacking fieldsets above each other*/
+	position: relative;
+}
+#msform2 fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	
+	/*stacking fieldsets above each other*/
+	position: relative;
+}
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+	display: none;
+}
+#msform2 fieldset:not(:first-of-type) {
+	display: none;
+}
+/*inputs*/
+#msform input, #msform textarea {
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+#msform2 input, #msform textarea {
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+/*buttons*/
+#msform .action-button {
+	width: 100px;
+	background: #27AE60;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px;
+	margin: 10px 5px;
+  text-decoration: none;
+  font-size: 14px;
+}
+#msform2 .action-button {
+	width: 100px;
+	background: #27AE60;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px;
+	margin: 10px 5px;
+  text-decoration: none;
+  font-size: 14px;
+}
+#msform .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+}
+#msform2 .action-button:hover, #msform .action-button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+}
+/*headings*/
+.fs-title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs-subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+/*progressbar*/
+#progressbar {
+	margin-bottom: 30px;
+	overflow: hidden;
+	/*CSS counters to number the steps*/
+	counter-reset: step;
+}
+#progressbar li {
+	list-style-type: none;
+	color: white;
+	text-transform: uppercase;
+	font-size: 9px;
+	width: 33.33%;
+	float: left;
+	position: relative;
+}
+#progressbar li:before {
+	content: counter(step);
+	counter-increment: step;
+	width: 20px;
+	line-height: 20px;
+	display: block;
+	font-size: 10px;
+	color: #333;
+	background: white;
+	border-radius: 3px;
+	margin: 0 auto 5px auto;
+}
+/*progressbar connectors*/
+#progressbar li:after {
+	content: '';
+	width: 100%;
+	height: 2px;
+	background: white;
+	position: absolute;
+	left: -50%;
+	top: 9px;
+	z-index: -1; /*put it behind the numbers*/
+}
+#progressbar li:first-child:after {
+	/*connector not needed before the first step*/
+	content: none; 
+}
+/*marking active/completed steps green*/
+
+
+
+  *, *:before, *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .grid-row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1200px;
+    margin: 0 auto;
+    padding-top: 30px;
+  }
+  .product {
+    width: 25%;
+    margin-bottom: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    display: flex;
+  }
+  .product--card {
+    border: 1px solid #ddd;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .product .product--image {
+    padding-bottom: 81.88%;
+    position: relative;
+    border-bottom: 1px solid #ddd;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    display: block;
+    overflow: hidden;
+    height: 0;
+  }
+  .img-responsive {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+  }
+  .product--title {
+    font-size: 30px;
+    display: block;
+    color: #333;
+    padding-bottom: 0 !important;
+    text-decoration: none;
+    padding: 20px;
+  }
+  .propiedades{
+    display: flex;
+    padding: 10px;
+    margin-left: 10px;
+  }
+  .product--brand {
+    color: #777;
+    display: block;
+    padding-top: 0 !important;
+    padding: 20px;
+    padding-bottom: 5px;
+    flex: 1 0 auto;
+  }
+  .product a {
+    color: inherit;
+    text-decoration: none;
+    display: block;
+  }
+  .product .product--price {
+    padding-top: 15px;
+    padding: 20px;
+  
+  }
+  .product--stock{
+    display: block;
+    margin-left:15px;
+  
+    padding-top: 0 !important;
+    font-size: 17px;
+    padding: 5px
+  }
+  .product .price--sell-price, .product .price--discount-price {
+    font-size: 2rem;
+  }
+  .price--sell-price {
+    color: #28a528;
+  }
+  .product .product--price .was-price, .product .product--price .price--rrp {
+    font-size: 1rem;
+  }
+  .price--sell-price.was-price, .price--rrp {
+    color: #777;
+    font-weight: 100;
+    text-decoration: line-through;
+  }
+  .price--discount-price {
+    color: #0074d9;
+  }
+  .tags {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    text-align: right;
+    bottom: 6px;
+    right: 12px;
+  }
+  .tags > .availability {
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+    padding: 4px 5px;
+    display: inline-block;
+    margin-left: 6px;
+    margin-bottom: 6px;
+    font-size: 0.75rem;
+  }
+  .tags > .availability.almost-gone {
+    background-color: #ff9600;
+  }
+  .tags > .availability.discount {
+    background-color: #0074d9;
+  }
+  .tags > .availability.sold-out {
+    background-color: #f00;
+  }
+  

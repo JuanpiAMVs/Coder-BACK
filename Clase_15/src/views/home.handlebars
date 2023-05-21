@@ -1,0 +1,55 @@
+<h1>
+    <h1>Home</h1>
+    <h3>Products</h3>
+
+<div class="grid-row">
+
+{{#each AllProducts}}
+    <div class="product">
+    <div class="product--card">
+      <a class="product--image" href="#" title="View">
+        <img class="img-responsive" src="{{this.thumbnails}}">
+        <span class="tags">  
+        </span>
+      </a>
+
+      <a class="product--title" href="#" title="View">{{this.title}}</a>
+
+      <div class="product--brand">
+        <a href="#" title="View">{{this.description}}</a>
+      </div>
+        <span class="product--price">Category: {{this.category}}</span>
+        <span class="product--stock">Stock<b> {{this.stock}}</b></span>
+      <p>
+        <span class="propiedades" style="padding: 5px;">ID: {{this._id}}</span>
+        <span class="propiedades" style="padding: 5px;">Code: {{this.code}}</span>
+        <span class="propiedades">Status: {{this.status}}</span>
+      </p>
+
+      <a class="product--price" href="#" title="View">
+        <span class="product--price-inner">
+                <div class="price--sell-price">${{this.price}}</div>
+    
+        </span>
+      </a>
+    </div>
+  </div>
+{{/each}}
+
+
+
+
+</div>
+
+
+
+  
+</div>
+    <input id="textbox">
+    <p id="logs"></p>
+</h1>
+
+
+
+<script src="/socket.io/socket.io.js"></script> {{!-- siempre arriba del script de home --}}
+<script src="/js/home.js"></script>
