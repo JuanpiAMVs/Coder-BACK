@@ -1,0 +1,40 @@
+<h1>Products</h1>
+
+{{#each products}}
+    <div class="product" style="display: inline-block"></li>
+    <div class="product--card">
+      <a class="product--image" href="#" title="View">
+        <img class="img-responsive" src="{{this.thumbnails}}">
+        <span class="tags">  
+        </span>
+      </a>
+
+      <a class="product--title" href="#" title="View">{{this.title}}</a>
+
+      <div class="product--brand">
+        <a href="#" title="View">{{this.description}}</a>
+      </div>
+        <span class="product--price">Category: {{this.category}}</span>
+        <span class="product--stock">Stock<b> {{this.stock}}</b></span>
+      <p>
+        <span class="propiedades" style="padding: 5px;">ID: {{this._id}}</span>
+        <span class="propiedades" style="padding: 5px;">Code: {{this.code}}</span>
+        <span class="propiedades">Status: {{this.status}}</span>
+      </p>
+
+      <a class="product--price" href="#" title="View">
+        <span class="product--price-inner">
+                <div class="price--sell-price">${{this.price}}</div>
+    
+        </span>
+      </a>
+          <button id="addCart">Add to Cart</button>
+    </div>
+
+  </div>
+{{/each}}
+
+<h2>Page: {{page}} of {{totalPages}}</h2>
+<a href={{prevLink}}><button>PrevPage</button></a>
+<a href={{nextLink}}><button>NextPage</button></a>
+
