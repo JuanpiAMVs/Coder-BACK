@@ -13,3 +13,11 @@ export const privacy = (privacyType) => {
         }
     }
 }
+
+export const authRoles = (role) => {
+    // Si llegue a este punto siempre debo tener un usuario ya
+    return async (req, res,next) => {
+        if(req.user.role != role ) return res.status(403).send({status: "error", error: "Forbidden"})
+        next()
+    }
+}

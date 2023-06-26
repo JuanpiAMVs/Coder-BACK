@@ -6,7 +6,7 @@ form.addEventListener('submit', async (event) => {
     const obj = {}
     data.forEach((value,key) => (obj[key] = value));
     console.log(obj)
-    const response = await fetch('/api/sessions/jwtLogin', {
+    const response = await fetch('/api/sessions/login', {
         method: 'POST', 
         body: JSON.stringify(obj),
         headers: {
@@ -15,13 +15,13 @@ form.addEventListener('submit', async (event) => {
     })
     const responsedata = await response.json()
     if(responsedata.status === "success"){
-        localStorage.setItem('accessToken', responsedata.accessToken)
+/*         localStorage.setItem('accessToken', responsedata.accessToken) */
         window.location.replace('/products')
     } else{
         Swal.fire({
             icon: 'error',
             title: 'Oops...',
-            text: "Error en las credenciales",
+            text: responsedata.error,
           })
     }
     console.log(responsedata)

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
-import { generateToken } from "../utils";
-import { authToken } from "../middlewares/jwtAuth";
+import { generateToken, passportCall } from "../utils.js";
+import { authToken } from "../middlewares/jwtAuth.js";
 
 const router = Router()
 
@@ -14,20 +14,27 @@ router.get('/registerFail', async (req, res) => {
     res.status(400).send({status: "error", error: req.session.messages })
 })
 
-router.post('/login', passport.authenticate('login', {failureRedirect: '/api/sessions/loginFail'}),  async (req,res) => {
-    req.session.user = {
+router.post('/login', passportCall('login'),  async (req,res) => {
+    
+    const user = {
+        id: req.user.id,
         name: req.user.name,
-        role: req.user.role,
-        email: req.user.email
+        email: req.user.email,
+        role: req.user.role
+
     }
-    res.send({status: "success"});
+   const accessToken = generateToken(user)
+    // Aqui envio el token por el body, para que el front lo guarde
+    /* res.send({status: "success", accessToken}); */
+
+    //Envio desde una cookie:
+    res.cookie('authToken', accessToken, {
+        //tiene que coincidir al expiracion con el jswt
+        maxAge: 1000*60*60*24,
+        httpOnly: true
+    }).sendStatus(200)
 })
 
-
-router.get('/loginFail', async (req, res) => {
-    console.log(req.session);
-    res.status(400).send({status: "error", error: req.session.messages});
-});
 
 router.post("/logout", async (req, res) => {
     req.session.destroy((err) => {
@@ -53,35 +60,7 @@ router.get('/githubcallback', passport.authenticate('github'), async (req, res) 
 })
 
 router.post('/jwtLogin', async (req, res) => {
-    const {email, password} = req.body
-    let accessToken
-    if(email === "adminCoder@coder.com" && password === "adminCod3r123"){
-        const user = {
-            id: 0,
-            name: `Admin`,
-            email: "...",
-            role: "admin"
-        }
-        //Adios a sesssion, genero token
-         accessToken = generateToken(user)
-        res.send({status: "success", accessToken: accessToken})
-    } 
- // buscar el usuario
-let user = await userModel.findOne({email});
-if(!user) return res.sendStatus(400)
 
-const isValidPassword = await validatePassword(password, user.password)
-if(!isValidPassword) return res.sendStatus(400)
-
-
-    user = {
-        id: user._id,
-        name: `${user.first_name} ${user.last_name}`,
-        email: user.email,
-        role: user.role
-    }
-    accessToken = generateToken(user)
-    res.send({status: "success", accessToken})
 })
 
 router.get('/jwtProfile', authToken,async (req, res) => {

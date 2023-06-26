@@ -1,14 +1,11 @@
 import { Router } from "express";
-import { authRoles, privacy } from "../middlewares/auth.js";
 import ProductManager from '../dao/fileSystem/Managers/ProductManager.js'
 import ProductsManagerdaoMongo from '../dao/mongo/Managers/productsManager.js'
 import CartsManager from "../dao/mongo/Managers/cartsManager.js";
-import { passportCall } from "../utils.js";
 
 const ProductsManager = new ProductManager('productos.json')
 const ProductsManagerDaoMongo = new ProductsManagerdaoMongo()
 const CartsManagerDaoMongo = new CartsManager()
-
 const router = Router()
 
 router.get('/', async (req, res) => {
@@ -87,8 +84,7 @@ router.get('/products', async (req,res) => {
             hasPrevPage: paginate.hasPrevPage,
             hasNextPage: paginate.hasNextPage,
             prevLink: paginate.prevLink,
-            nextLink: paginate.nextLink,
-            user: req.session.user
+            nextLink: paginate.nextLink
         })
 
     }catch(err){
@@ -109,26 +105,6 @@ router.get('/carts/:cid', async (req,res) => {
     }catch(err){
         return res.status(400).send({status: "error", message: err.message})
     }
-})
-
-router.get('/register', privacy('NO_AUTHENTICATED') ,async (req, res) => {
-    res.render('register')
-})
-
-router.get('/login' ,async (req, res) => {
-    res.render('login')
-})
-
-router.get('/profile',  privacy('PRIVATE') ,async (req, res) => {
-    res.render('profile',{
-        user: req.session.user
-    })
-})
-
-router.get('/', passportCall('jwt', {redirect:'/login'}) , authRoles('admin'),async (req, res) => {
-    console.log(req.user)
-    res.render('jwtProfile', {user: req.user})
-
 })
 
 export default router

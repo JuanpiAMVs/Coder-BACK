@@ -107,7 +107,6 @@ router.delete('/:cid', async (req, res) => {
       if (!cart) {
         return res.status(404).send({ status: 'error', message: 'Carrito no encontrado' });
       }
-      return res.status(200).send({status: "success", message: `carrito ${cid} ha sido borrado`})
     }catch(err){
       return res.status(400).send({ status: "error", message: err.message})
     }

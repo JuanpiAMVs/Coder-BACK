@@ -7,6 +7,7 @@ const ProductsManager = new ProductManager('products.json')
 app.get('/products', async (req, res) => {
     const { limit } = req.query
     const products = await ProductsManager.getProducts()
+    console.log(products)
     if(limit) {
         return res.json(await products.slice(0, limit))
     } 

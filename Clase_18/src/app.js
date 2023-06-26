@@ -1,37 +1,34 @@
 import express from 'express'
+import cookieParser from 'cookie-parser'
+import session from 'express-session'
 import handlebars from 'express-handlebars'
 import mongoose from 'mongoose'
-import passport from 'passport'
-import cookieParser from 'cookie-parser'
 
 import viewsRouter from './routes/views.router.js'
 import productsRouter from './routes/products.routes.js'
 import cartsRouter from './routes/carts.routes.js'
-import sessionsRouter from './routes/session.routes.js'
 import __dirname from './utils.js'
 import registerChatHandler from './listeners/chatHandler.js'
-import initializePassportStrategies from './config/passport.config.js'
 
 import {Server} from 'socket.io'
 
-
 const app = express()
+
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+app.use(cookieParser('secretString')) //palabra para firmar las cookies y sean segurass
+app.use(session({
+    secret: 'secretCoder',
+    resave: true,        //para mantener activa la sesion del usuario
+    saveUninitialized: true      
+}))
 
 //motor de vistas
 app.engine('handlebars', handlebars.engine())
 app.set('views', `${__dirname}/views`)
 app.set('view engine', 'handlebars')
 
-
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
 app.use(express.static(`${__dirname}/public`))
-app.use(cookieParser())
-
-const connection = mongoose.connect("mongodb+srv://JuanpiAMVs:hiTaY30ZfxsahFoa@ecommerce.gagjgxt.mongodb.net/?retryWrites=true&w=majority")
-
-initializePassportStrategies();
-
 
 app.use((req, res, next) => {
     //HACER ESO LE DA A TODOS LAS RUTAS LA POSIBILIDAD DE ACCEDER A io
@@ -41,7 +38,6 @@ app.use((req, res, next) => {
 app.use('/', viewsRouter)
 app.use('/api/products', productsRouter )
 app.use('/api/carts', cartsRouter)
-app.use('/api/sessions', sessionsRouter)
 
 const auth = (req,res,next) => {
     if(req.session?.user === 'pepe' && req.session?.admin){
@@ -74,7 +70,6 @@ app.get('/logout', (req,res) => {               //destruir sesion, logout
     req.session.destroy(err => {
         if(!err) res.send('Logout Ok')
         else res.send({status: 'Logout error', body: err})
-        res.redirect()
     })
 })
 app.get('/login', (req, res) => {
@@ -95,7 +90,7 @@ app.get('/privado', auth, (req,res) => {
 
 const PORT = process.env.PORT||8080
 const server = app.listen(PORT, () => console.log(`Server up and running on PORT ${PORT}`))
-
+const connection = mongoose.connect("mongodb+srv://JuanpiAMVs:hiTaY30ZfxsahFoa@ecommerce.gagjgxt.mongodb.net/?retryWrites=true&w=majority")
 
 //Server de socket
 const io = new Server(server); //unir ambos servers

@@ -1,0 +1,16 @@
+<div>
+  {{! todo lo que escriba en este archivo se va a reemplazar dentro de main.handlebars }}
+  <h1>Primera vista renderizada {{name}}</h1>
+  {{#if comidas}}
+    {{! se crea escribiendo "hif" }}
+    <h1>Hay comidas</h1>
+    <ul>
+        {{#each comidas}}  {{!-- se crea con "heach" --}}
+        <li><p>{{this.name}}</p></li>
+        {{/each}}
+    </ul>
+  {{else}}
+    <h1>No hay comidas</h1>
+  {{/if}}
+</div>
+<script src="/js/comidas.js"></script>

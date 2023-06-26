@@ -1,9 +1,10 @@
 import passport from 'passport';
 import local from 'passport-local'
 import GithubStrategy from 'passport-github2'
+import { Strategy, ExtractJwt } from 'passport-jwt';
 
 import userModel from '../dao/mongo/models/user.model.js'
-import { createHash, validatePassword } from '../utils.js'
+import { createHash, validatePassword, cookieExtractor } from '../utils.js'
 
 
 const LocalStrategy = local.Strategy
@@ -93,20 +94,13 @@ const initializePassportStrategies = () => {
             done(err)
         }
     }))
-
-    passport.serializeUser(function(user,done){
-        return done(null, user.id)
-    })
-    passport.deserializeUser(async function(id, done){
-        if(id===0){
-            return done(null,{
-                role: "admin",
-                name: "ADMIN"
-            } )
-        }
-        const user = await userModel.findOne({_id: id})
-        return done(null, user)
-    })
+    //Passport se encargará de la verificación del token
+    passport.use('jwt' , new Strategy({
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+        secretOrKey:"jwtSecret"
+    }, async(payload,done) => {
+        return done(null, payload)
+    }))
 }
 
 export default initializePassportStrategies

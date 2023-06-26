@@ -1,4 +1,4 @@
-const jwt = localStorage.getItem("accesToken")
+/* const jwt = localStorage.getItem("accesToken")
 if(!jwt) window.location.replace('/login')
 
 fetch('/api/sessions/jwtProfile', {
@@ -13,4 +13,4 @@ fetch('/api/sessions/jwtProfile', {
     const email = document.getElementById('email')
     welcome.innerHTML = `Hola, ${result.payload.name}`
     email.innerHTML = result.payload.email
-})
+}) */
