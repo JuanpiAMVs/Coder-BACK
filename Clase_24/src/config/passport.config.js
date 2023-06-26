@@ -118,7 +118,7 @@ const initializePassportStrategies = () => {
         }
     }))
     //Passport se encargará de la verificación del token
-    passport.use('current' , new Strategy({
+    passport.use('current', new Strategy({
         jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
         secretOrKey:"jwtSecret"
     }, async(payload,done) => {
