@@ -82,7 +82,7 @@ export default class SessionsRouter extends BaseRouter{
             }).sendSuccess("Logged In")
         })
 
-        this.get('/current', ["ADMIN"], passportCall('jwt', {strategyType:"locals"}), (req, res) => {
+        this.get('/current', ["ADMIN"], passportCall('current', {strategyType:"locals"}), (req, res) => {
             res.sendSuccessWithPayload({user: req.user})
         })
     }
