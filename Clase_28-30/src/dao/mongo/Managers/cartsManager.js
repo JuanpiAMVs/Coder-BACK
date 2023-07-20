@@ -1,6 +1,7 @@
 import ProductsManager from "./productsManager.js";
 import cartsModel from "../models/carts.model.js";
 import mongoose from "mongoose";
+import productsModel from "../models/products.model.js";
 
 
 export default class CartsManager {
@@ -24,9 +25,10 @@ export default class CartsManager {
       return addCart
   }
 
-  async getCartBy(params) {
+  async getCartById(cid) {
     try {
-      return cartsModel.findOne(params).lean()
+      const cart = await cartsModel.findOne({_id: cid}).populate("products.product")
+      return cart
 
     } catch (error) {
       console.log(error);
@@ -34,21 +36,22 @@ export default class CartsManager {
   }
 
   async addProductToCart(cid, pid, quantity = 1){
-    try{    
-     const repeatedProduct = await cartsModel.findOneAndUpdate(
+    try{ 
+      const product = await productsModel.findById(pid)   
+      const repeatedProduct = await cartsModel.findOneAndUpdate(
       { _id: cid, "products.product": pid },
-      { $inc: { "products.$.quantity": quantity } },
+      { $inc: { "products.$.quantity": quantity, "products.$.amount": quantity * product.price } },
       { new: true }
     );
     if(repeatedProduct){
       console.log("Producto encontrado, cantidad actualizada")
       return repeatedProduct
     }
-
-      const updateCart = await cartsModel.updateOne(
+    
+    const updateCart = await cartsModel.updateOne(
           {_id: cid},
-          {$push: { products: { product: new mongoose.Types.ObjectId(pid), quantity, _id: pid}}})
-      const GetCart = await this.getCartBy({_id: cid})
+          {$push: { products: { product: new mongoose.Types.ObjectId(pid), quantity,amount: product.price * quantity, _id: pid }}})
+      const GetCart = await this.getCartById({_id: cid})
       console.log("Producto agregado y carrito actualizado"); 
       return GetCart;
   
@@ -71,6 +74,35 @@ export default class CartsManager {
 
     return cart;
   }
+
+  updateProductQuantity = async (cartId, productId, quantity) => {
+    const cart = await this.getCartById(cartId);
+
+    if (!cart) {
+      throw new Error(
+        "Carrito no encontrado. Por favor, ingrese una ID válida."
+      );
+    }
+
+    const productIndex = cart.products.findIndex(
+      (product) => product.product.toString() === productId
+    );
+
+    if (productIndex !== -1) {
+      // Actualizar la cantidad del producto en el carrito
+      cart.products[productIndex].quantity = quantity;
+    } else {
+      throw new Error(
+        "Producto no encontrado. Por favor, ingrese una ID válida."
+      );
+    }
+
+    // Guardar los cambios en la base de datos
+    await cart.save();
+
+    // Retornar el carrito actualizado
+    return cart;
+  };
 
 
   async deleteProductfromCart(cid,pid){

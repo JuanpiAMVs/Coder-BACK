@@ -8,7 +8,8 @@ import {
   updateProductQuantity,
   deleteCart,
   deleteProductfromCart,
-  addProductToCart
+  addProductToCart,
+  Purchase
 } from "../controllers/cart.controllers.js";
 
 
@@ -22,6 +23,6 @@ export default class CartsRouter extends BaseRouter {
     this.post("/:cid/products/:pid", ["USER"], addProductToCart);
     this.put("/:cid/products/:pid", ["PUBLIC"], updateProductQuantity);
     this.delete("/:cid/products/:pid", ["PUBLIC"], deleteProductfromCart);
-    this.post("/:cid/purchase", ["ADMIN"])
+    this.post("/:cid/purchase", ["USER"], Purchase )
   }
 }

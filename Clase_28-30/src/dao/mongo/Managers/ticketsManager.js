@@ -9,7 +9,6 @@ export default class TicketManager {
     return ticketModel.findById(tid);
   };
   createTickets = async (ticket) => {
-    ticket.code = uuidv4();
     return ticketModel.create(ticket);
   };
   deleteTickets = async (tid) => {

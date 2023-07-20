@@ -1,4 +1,4 @@
-import { productsService, cartsService } from "../services/services.js";
+import { productsService, cartsService, ticketServices } from "../services/services.js";
 import { v4 as uuidv4 } from 'uuid';
 
 export const getCarts = async (req, res) => {
@@ -20,20 +20,17 @@ export const createCart = async (req, res) => {
 }
 
 export const getCartById = async (req, res) => {
-    try {
-        const cartId = req.params.cid;
-        const cart = await cartsService
-          .getCartById(cartId)
-          .populate("products.product");
-        if (cart) {
-          return res.sendSuccessWithPayload(cart);
-        } else {
-          return res.sendBadRequest("Producto no encontrado, ingrese un ID válido");
-        }
-      } catch (error) {
-        return res.sendBadRequest(error.message);
-      }
-    };
+  try {
+    const cId = req.user.cart;
+    const cart = await cartsService.getCartById({ _id: cId });
+    console.log(cart)
+    if (!cart)
+      res.status(404).send({ status: "error", error: "product not found" });
+    res.send({ status: "success", payload: cart });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const addProductToCart = async (req, res) => {
         try{
@@ -74,26 +71,31 @@ export const updateCartById = async (req, res) => {
     };
 
 
-export const updateProductQuantity = async (req, res) => {   
-    try{
-        const {cid} = req.params
-        const {pid} = req.params
-        const {quantity} = req.body
-        
-        const updatedCart = await cartsModel.findByIdAndUpdate(cid,{ $set: { 'products.$[elem].quantity': quantity } },
-          { new: true, arrayFilters: [{ 'elem._id': pid }] }
+    export const updateProductQuantity = async (req, res) => {
+      try {
+        const cid = req.params.cid;
+        const pid = req.params.pid;
+        const quantity = req.body.quantity;
+         if(!cid, !pid, !quantity) return res.sendBadRequest("Argumentos invalidos")
+    
+        const updatedProductQuantity = await cartsService.updateProductQuantity(
+          cid,
+          pid,
+          quantity
         );
-    
-        if (!updatedCart) {
-          return res.sendBadRequest({ message: 'Carrito no encontrado' });
+        if (updatedProductQuantity) {
+          res.sendSuccessWithPayload({
+            message: "Cantidad actualizada correctamente",
+            updatedProductQuantity,
+          });
+        } else {
+          res.sendBadRequest(error.message);
         }
-    
-        return res.sendSuccessWithPayload({ message: 'Cantidad del producto actualizada', cart: updatedCart });
-      }catch(err){
-        return res.sendBadRequest({error: err.message})
+      } catch (error) {
+        console.log(error);
+        res.sendInternalError(error.message);
       }
-     
-}
+    };
 
 
 export const deleteCart = async (req, res) => {
@@ -122,32 +124,40 @@ export const deleteProductfromCart = async (req, res) => {
 }
 
 
-export const doPurchase = async (req, res) => {
+export const Purchase = async (req, res) => {
   try {
     const cartId = req.params.cid;
-    const cart = await cartsService.getCartById(cartId).populate("products.product");
+    const cart = await cartsService.getCartById(cartId);
     
     if (!cart) {
       return res.send({status: "error", message: "Carrito no encontrado" });
     }
 
     const updatedProducts = [];
-    let amount = 0;
+    let totalAmount = 0
+    let totalQuantity = 0
 
     for (const item of cart.products) {
-      const { product, quantity } = item;
+      const { product, quantity, status } = item;
 
-      if (product.stock < quantity) {
-        return res.send({status: "error",message: `No hay suficiente stock para ${product.title} id: ${product.id}`,});
+      if (quantity <= 0) {
+        return res.send({status: "error", message: `La cantidad de ${product.title} debe ser mayor que 0`,});
       }
 
-      product.stock -= quantity;
-      await product.save();
-
-      updatedProducts.push({ product: product._id, quantity });
-
-      amount += product.price * quantity;
+      if (product.stock < quantity) {
+        updatedProducts.push({product: product._id, amount: item.amount, quantity,status:"Out of stock"})
+      }
+      else{
+        product.stock -= quantity;
+        await product.save()
+        updatedProducts.push({ product: product._id, quantity, amount: item.amount, status: "Stock" });
+        totalAmount += item.amount
+        totalQuantity += item.quantity
+      }    
     }
+
+    const StayProducts = updatedProducts.filter((item) => item.status !== "Stock")
+    const BuyProducts = updatedProducts.filter((item) => item.status == "Stock")
 
     const code = uuidv4()
     const user = req.user;
@@ -155,19 +165,22 @@ export const doPurchase = async (req, res) => {
     if (!user) {
       return res.send({status: "error", message: "User not found" });
     }
-
-    const ticket = await ticketsService.createTicket({
+  
+    const ticket = await ticketServices.createTickets({
       code,
-      amount,
+      amount: totalAmount,
       purchaser: user.email,
     });
 
     await ticket.save();
 
-    cart.products = updatedProducts;
+    cart.products = StayProducts
+    cart.totalAmount = totalAmount
+    cart.totalQuantity = totalQuantity
     await cart.save();
 
-    return res.sendSuccessWithPayload({ cart, amount, code, purchaser: user.email });
+
+    return res.sendSuccessWithPayload({ "Productos comprados": BuyProducts, "Productos sin stock": StayProducts });
   } catch (error) {
     console.log(error);
     return res.sendInternalError(error.message);

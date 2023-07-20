@@ -23,5 +23,8 @@ export default class CartsService{
     addProductToCart=(cid,pid)=>{
     return this.dao.addProductToCart(cid,pid)
     }
+    updateProductQuantity = (cartId, productId, quantity) => {
+        return this.dao.updateProductQuantity(cartId, productId, quantity);
+      };
 }
 

@@ -11,18 +11,29 @@ const schema = new mongoose.Schema({
             },
             quantity: {
                 type: Number,
-                default:1
+            },
+            amount: {
+                type: Number,
+              },
+            status: {
+              type: String
             }
-        }
-    ]
-})
+          }
+     ],
+          totalAmount:{
+              type:Number,
+              default: 0
+          },
+          totalQuantity:{
+            type:Number,
+            default: 0
+          }
+        
+  
+  
+  },{timestamps:{createdAt: 'created_at', updatedAt: 'updated_at'}})
 
-schema.pre('findOne', function () {
-    this.populate('products.product')
-})
-schema.pre('find', function () {
-    this.populate('products.product')
-})
+
 
 const cartsModel = mongoose.model(collection, schema);
 

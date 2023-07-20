@@ -4,9 +4,9 @@ const collection = "tickets";
 
 const schema = new mongoose.Schema(
   {
-    code: String,
-    amount: Number,
-    purchaser: String,
+    code: { type: String, required: true },
+    amount: { type: Number, required: true },
+    purchaser: { type: String, required: true },
   },
 
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
