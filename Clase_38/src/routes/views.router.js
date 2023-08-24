@@ -59,38 +59,7 @@ export default class ViewsRouter extends BaseRouter{
             res.render('chat')
         })
 
-        this.get('/products',["PUBLIC"], async (req,res) => {
-            try{
-                const { limit=10, page=1, sort, query, category } = req.query
-                if(limit !== undefined && isNaN(limit)){
-                    return res.status(400).send({data:{status: "error", message: `${limit} is not a number`}})
-                }
-                if(limit < 0) {
-                    return res.status(400).send({data: {status: "error", message: `${limit} It has to be a positive number` }})
-                }
-                const paginate = await ProductsManagerDaoMongo.getPaginatedProducts({category: category}, {limit, page, sort, query})
-                console.log(paginate)
-                if(!paginate) return res.status(400).send({status: "error", message: 'Error al encontrar productos'}) ;
-                
-                res.render('products', {       
-                    css:'home',
-                    products: paginate.docs,
-                    totalPages: paginate.totalPages,
-                    prevPage: paginate.prevPage,
-                    nextPage: paginate.nextPage,
-                    page: paginate.page,
-                    hasPrevPage: paginate.hasPrevPage,
-                    hasNextPage: paginate.hasNextPage,
-                    prevLink: paginate.prevLink,
-                    nextLink: paginate.nextLink,
-                    user: req.user.name
-                })
-                
-            }catch(err){
-                console.log(err)
-                return res.status(400).send({status: "error", message: err})
-            }
-        })
+        this.get('/products',["PUBLIC"], viewsControllers.getProducts)
 
 
         this.get('/register',  ["PUBLIC"],async (req, res) => {

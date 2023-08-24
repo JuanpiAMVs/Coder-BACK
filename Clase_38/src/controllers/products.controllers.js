@@ -3,7 +3,7 @@ import { productsErrorIncompleteValues } from "../constants/productsErrors.js";
 import ErrorService from "../services/ErrorService.js";
 import {productsService } from "../services/services.js";
 
-export const getProducts = async(req,res)=>{
+ const getProducts = async(req,res)=>{
         try{
         const {limit=10, page = 1, sort, query} = req.query
 
@@ -32,6 +32,7 @@ export const getProducts = async(req,res)=>{
                 hasNextPage: rest.hasNextPage,
                 prevLink: null,
                 nextLink:null
+                
             }
     
             if(rest.hasPrevPage){
@@ -66,10 +67,12 @@ export const getProducts = async(req,res)=>{
       }
 
 
-export const getProductBy = async(req,res)=>{
+const getProductBy = async (req, res) => {
     try{
-        const {pid}= req.params
-        const product= await productsService.getProductBy("_id",pid)
+        const pid = req.params.pid
+        if(!pid) return res.sendBadRequest("Ingrese PID")
+        const product= await productsService.getProductBy(pid)
+        console.log(product)
         return res.sendSuccess({ payload: product})
     }
     catch(error){
@@ -77,7 +80,7 @@ export const getProductBy = async(req,res)=>{
     }
 }
 
-export const addProduct = async (req, res) => {     
+const addProduct = async (req, res) => {     
         try {
             const {title, description, price, category, code, img} = req.body
             const product = {
@@ -117,7 +120,7 @@ export const addProduct = async (req, res) => {
     }
 }
 
-export const updateProduct = async (req, res) => {
+ const updateProduct = async (req, res) => {
     const pid = req.params.pid
     const Updproduct = req.body
     try {
@@ -125,7 +128,7 @@ export const updateProduct = async (req, res) => {
             return res.sendBadRequest({ data: "Faltan argumentos"});
         }
         const UpdateProduct = await productsService.updateProduct(pid, Updproduct )
-        if(!UpdateProduct) return res.sendBadRequest({ data: "Product target not found"});
+        if(!UpdateProduct) return res.sendBadRequest( "Product target not found");
         console.log("Producto agregado y actualizado");
         return res.sendSuccess({ message: `Product update ${await ProductsManagerDaoMongo.getProductBy({_id: pid})}`})
       } catch (err) {
@@ -133,14 +136,29 @@ export const updateProduct = async (req, res) => {
       }
 }
 
-export const deleteProduct = async (req, res) => {
-    try{
-        const pid = req.params.pid
-        if(req.user.role == "ADMIN") await ProductsManagerDaoMongo.deleteProduct(pid)
-        if (product.owner !== req.user.email) return res.sendBadRequest('Forbidden! You cannot delete this product')
-        const product = await ProductsManagerDaoMongo.deleteProduct(pid)
-        return res.sendSuccess(`Product with ID ${pid} has been deleted`)
-    }catch(err){
-        return res.sendBadRequest(err)
+const deleteProduct = async (req, res) => {
+  try {
+    const { pid } = req.params
+    const product = await productsService.getProductBy({_id: pid})
+    if (!product) return res.sendBadRequest(`ID: ${pid} not found`)
+    
+    if(req.user.role === "ADMIN") {
+      const deleteProduct = await productsService.deleteProduct(pid)
+    } else if (req.user.role === "PREMIUM" && product.owner === req.user.email) {
+      await productsService.deleteProduct(pid);
     }
+
+    return res.sendSuccess(`ID: ${pid} was deleted`);
+} catch (error) {
+    console.log(error)
+    return res.sendInternalError(error)
+}
+}
+
+export default{
+  getProducts,
+  getProductBy,
+  deleteProduct,
+  updateProduct,
+  addProduct
 }

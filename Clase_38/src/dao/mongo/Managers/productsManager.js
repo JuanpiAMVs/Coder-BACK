@@ -5,8 +5,8 @@ export default class ProductsManager {
     return productsModel.find(params).lean();
   }
 
-  async getProductBy(params) {
-    return productsModel.findOne(params).lean();
+  async getProductBy(pid) {
+    return productsModel.findById(pid)
   }
 
   async addProduct(product) {
@@ -17,11 +17,11 @@ export default class ProductsManager {
     return productsModel.findByIdAndUpdate(id, { $set: update });
   }
 
-  async deleteProduct(id) {
-    return productsModel.findByIdAndDelete(id);
+  async deleteProduct(pid) {
+    return productsModel.findByIdAndDelete(pid);
   }
 
-  getPaginatedProducts = async (filters, options) => {
+  async paginate (filters, options) {
     try {
       const result = await productsModel.paginate(filters, options);
       return result;

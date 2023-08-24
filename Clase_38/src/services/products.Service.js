@@ -11,8 +11,8 @@ export default class ProductsServices{
         return this.dao.getProductsTo(param1,param2)
     }
 
-    getProductBy=(param1,param2)=>{
-        return this.dao.getProductBy(param1,param2)
+    getProductBy=(pid)=>{
+        return this.dao.getProductBy(pid)
     }
 
     createProduct=(product)=>{
@@ -32,6 +32,6 @@ export default class ProductsServices{
     }
 
     deleteProduct=(pid)=>{
-        return this.dao.updateProduct(pid)
+        return this.dao.deleteProduct(pid)
     }
 }
