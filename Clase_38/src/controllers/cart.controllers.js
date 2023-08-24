@@ -104,11 +104,12 @@ export const updateCartById = async (req, res) => {
 export const deleteCart = async (req, res) => {
         try{
           const cid = req.params.cid;
-          const cart = await cartsModel.findByIdAndUpdate({ _id: cid }, { products: []}, { new: true });
+          const cart = await cartsService.updateCart(cid , []);
+          console.log(cid)
           if (!cart) {
-            return res.sendBadRequest({ message: 'Carrito no encontrado' });
+            return res.sendBadRequest({ message: `Carrito ${cid} no encontrado` });
           }
-          return res.sendSuccess({ message: `carrito ${cid} ha sido borrado`})
+          return res.sendSuccess({ message: `Todos los productos del carrito ${cid} han sido borrados`})
         }catch(err){
           return res.sendBadRequest({ message: err.message})
         } 

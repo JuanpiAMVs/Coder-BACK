@@ -57,22 +57,24 @@ export default class CartsManager {
   
     }catch(error){
       console.log(error);
-      return err
+      return error
     }
   }
   async updateCart(cid, updatedProducts) {
-    const cart = await this.getCartById(cid);
+    try{
+      const cart = await this.getCartById(cid);
 
     if (cart) {
       cart.products = updatedProducts;
       await cart.save();
-    } else {
-      throw new Error(
-        "Carrito no encontrado. Ingrese una ID válida."
-      );
+      return cart;
     }
 
-    return cart;
+  }catch(err) {
+      return err
+    }
+
+
   }
 
   updateProductQuantity = async (cartId, productId, quantity) => {
