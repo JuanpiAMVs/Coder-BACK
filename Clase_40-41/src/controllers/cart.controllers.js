@@ -21,11 +21,10 @@ export const createCart = async (req, res) => {
 
 export const getCartById = async (req, res) => {
   try {
-    const cId = req.user.cart;
+    const cId =  req.params.cid
     const cart = await cartsService.getCartById({ _id: cId });
     console.log(cart)
-    if (!cart)
-      res.status(404).send({ status: "error", error: "product not found" });
+    if (!cart) res.status(404).send({ status: "error", error: "cart not found" });
     res.send({ status: "success", payload: cart });
   } catch (err) {
     console.log(err);
