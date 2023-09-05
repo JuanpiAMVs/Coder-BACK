@@ -5,9 +5,12 @@ export default class ProductsManager {
     return productsModel.find(params).lean();
   }
 
-  async getProductBy(pid) {
+  async getProductById(pid) {
     return productsModel.findById(pid)
   }
+  async getProductBy (params) {
+    return productsModel.findOne(params)
+}
 
   async addProduct(product) {
     return productsModel.create(product);

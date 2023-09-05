@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import EErrors from "../constants/EErrors.js";
 import { productsErrorIncompleteValues } from "../constants/productsErrors.js";
 import ErrorService from "../services/ErrorService.js";
@@ -67,29 +68,31 @@ import {productsService } from "../services/services.js";
       }
 
 
-const getProductBy = async (req, res) => {
+const getProductById = async (req, res) => {
     try{
         const pid = req.params.pid
-        if(!pid) return res.sendBadRequest("Ingrese PID")
-        const product= await productsService.getProductBy(pid)
+        if(!pid) return res.sendBadRequest("Ingrese los parametros")
+        const product= await productsService.getProductById(pid)
         console.log(product)
         return res.sendSuccess({ payload: product})
     }
     catch(error){
+      console.log(error)
         return res.sendBadRequest(error)
     }
 }
 
 const addProduct = async (req, res) => {     
         try {
-            const {title, description, price, category, code, img} = req.body
+            const {title,stock, description, price, category, code, thumbnails} = req.body
             const product = {
               title,
               description,
               price,
               category,
               code,
-              img,
+              thumbnails,
+              stock,
               owner: req.user.email
             }
             if (!title ||!description ||!code || !price || !stock ||!category
@@ -103,19 +106,20 @@ const addProduct = async (req, res) => {
                 req.logger.error(`Add product error`);
             }
             const products = await productsService.getProducts()
-            const findCode = await productsService.getProductBy({code: productBody.code});
+            const findCode = await productsService.getProductBy({ code:'66666'});
             if (findCode) {
                 return res.sendBadRequest(`El codigo ${findCode.code} ya se encuentra ocupado`)
             } else {    
-              if(productBody.thumbnails.length === 0) {
-                productBody.thumbnails = []
+              if(thumbnails.length === 0) {
+                thumbnails = []
               }
-              if(productBody.owner = undefined) productBody.owner == "ADMIN"
-              const addProduct = await productsService.addProduct(productBody)
+              if(product.owner = undefined) owner == "ADMIN"
+              const addProduct = await productsService.addProduct(product)
               console.log("Producto agregado");
               return res.sendSuccess({ data: addProduct})
             }
     }catch(err){
+        console.log(err)
         return res.sendBadRequest(err)
     }
 }
@@ -157,7 +161,7 @@ const deleteProduct = async (req, res) => {
 
 export default{
   getProducts,
-  getProductBy,
+  getProductById,
   deleteProduct,
   updateProduct,
   addProduct

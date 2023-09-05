@@ -50,15 +50,15 @@ const initializePassportStrategies = () => {
     passport.use('login', new LocalStrategy({usernameField: 'email'}, async (email,password,done) => {
         //PASSPORT SOLO DEBE DEVOLVER AL USUARIO FINAL,  EL NO ES RESPONSABLE DE LA SESION
         try{
-            if(email === "adminCoder@coder.com" && password === "adminCod3r123"){
+/*             if(email === "adminCoder@coder.com" && password === "adminCod3r123"){
                 const user = {
                     id: 0,
                     name: `Admin`,
                     email: "...",
-                    role: "admin"
+                    role: "ADMIN"
                 }
                 return done(null, user )
-            } 
+            }  */
             if(email === "admin@admin.com" && password === "123"){
                 const user  = {
                     id: 1,
