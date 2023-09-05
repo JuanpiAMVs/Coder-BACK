@@ -1,0 +1,141 @@
+paths:
+  /api/products:
+    get:
+      summary: Retorna todos los productos.
+      tags:
+        - Products
+      role: PUBLIC
+      responses: 
+        "200":
+          description: Se obtiene todos los productos.
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "500":
+          description: Error interno del servidor o base de datos.
+    post:
+      summary: Añadir producto al carrito mediante Body.
+      tags:
+        - Products
+      role: PEMIUM, ADMIN
+      parameters:
+          in: requestBody
+          description: Datos del nuevo producto.
+          required: true
+      responses:
+        "200":
+          description: Envias el producto mediante el body y se añade a la base de datos.
+          content: 
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "400":
+          description: Solicitud incorrecta, revisar los parametros del body.
+  /api/products/{pid}:
+    get:
+      summary: Retorna el producto por su ID en la URL.
+      tags:
+        - Products
+      role: PUBLIC
+      parameters:
+        - in: path
+          name: pid
+          required: true
+          type: string
+          description: PID
+      responses: 
+        "200":
+          description: Se encontró el producto.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#components/schemas/Product'
+        "400":
+          description: No se encontró el producto.
+    put:
+      summary: Actualiza el producto por PID.
+      tags:
+        - Products
+      role: ADMIN
+      parameters:
+        - name: PID
+          in: path
+          description: ID del producto.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Datos del producto a actualizar
+        required: true
+      responses:
+        "200":
+          description: "Producto ha sido actualizado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: "No se ha encontrado el producto" 
+    delete:
+      summary: Borra un producto por su ID.
+      tags:
+        - Products
+      role: ADMIN
+      parameters:
+        - name: PID
+          in: path
+          description: ID del producto.
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "El producto fue eliminado satisfactoriamente"
+        "400":
+          description: "Producto no encontrado"
+
+      
+
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Título del producto.
+        description:
+          type: string
+          description: Descripción del producto.
+        price:
+          type: number
+          description: Precio/valor del producto.
+        category:
+          type: string
+          description: Categoría del producto.
+        stock:
+          type: number
+          description: Cantidad de unidades del producto disponibles.
+        code:
+          type: string
+          description: Código del producto (único)
+        img:
+          type: array
+          description: Imágenes del producto.
+        quantity:
+          type: number
+          description: Cantidad del producto.
+        owner:
+          type: string
+          description: Creador del producto.
+        _id:
+          type: string
+          description: ID unico del producto, generado por MongoDB.
