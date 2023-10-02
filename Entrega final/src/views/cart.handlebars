@@ -1,0 +1,56 @@
+<h1>Shopping Cart</h1>
+<div>
+    <p>Email: {{user.email}}</p>
+    <p id="cid">CartID: {{user.cart}}</p>
+</div>
+<div class="shopping-cart">
+
+  <div class="column-labels">
+    <label class="product-image">Image</label>
+    <label class="product-details">Product</label>
+    <label class="product-price">Price</label>
+    <label class="product-quantity">Quantity</label>
+    <label class="product-removal">Remove</label>
+    <label class="product-line-price">Total</label>
+  </div>
+    {{#each products}}
+     <div class="product">
+    <div class="product-image">
+      <img src="{{this.thumbnails}}">
+    </div>
+    <div class="product-details">
+      <div class="product-title">{{this.title}}</div>
+      <p class="product-description">{{this.description}}</p>
+    </div>
+    <div class="product-price">{{this.price}}</div>
+    <div class="product-quantity">
+      <p>{{this.quantity}}</p>
+    </div>
+    <div class="product-removal">
+      <button class="remove-product">
+        Remove
+      </button>
+    </div>
+    <div class="product-line-price">{{this.productTotal}}</div>
+  </div>
+{{/each}}
+
+  <div class="totals">
+    <div class="totals-item totals-item-total">
+      <label>Grand Total</label>
+      <div class="totals-value" id="cart-total">{{grandTotal}}</div>
+    </div>
+    
+  </div>
+      
+      <button class="checkout">Checkout</button>
+
+</div>
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/carts.js"></script> 
+
+

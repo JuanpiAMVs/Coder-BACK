@@ -1,0 +1,240 @@
+html, body {
+  font-size: 14px;
+  line-height: 1.4;
+  background-color: #fff;
+  color: #333;
+}
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.grid-row {
+  display: flex;
+  flex-wrap: wrap;
+  width: 1200px;
+  margin: 0 auto;
+  padding-top: 30px;
+}
+.product {
+  width: 25%;
+  margin-bottom: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+}
+.product--card {
+  border: 1px solid #ddd;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.product .product--image {
+  padding-bottom: 81.88%;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  display: block;
+  overflow: hidden;
+  height: 0;
+}
+.img-responsive {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  -moz-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.product--title {
+  font-size: 20px;
+  display: block;
+  color: #333;
+  padding-bottom: 0 !important;
+  text-decoration: none;
+  padding: 20px;
+}
+.propiedades{
+  display:inline;
+  padding: 10px;
+  margin-left: 10px;
+}
+.product--brand {
+  color: #777;
+  display: block;
+  padding-top: 0 !important;
+  padding: 20px;
+  flex: 1 0 auto;
+}
+.product a {
+  color: inherit;
+  text-decoration: none;
+  display: block;
+}
+.product .product--price {
+  padding-top: 0 !important;
+  padding: 20px;
+
+}
+.product--stock{
+  display: block;
+  margin-left:15px;
+
+  padding-top: 0 !important;
+  font-size: 17px;
+  padding: 5px
+}
+.product .price--sell-price, .product .price--discount-price {
+  font-size: 2rem;
+}
+.price--sell-price {
+  color: #28a528;
+}
+.product .product--price .was-price, .product .product--price .price--rrp {
+  font-size: 1rem;
+}
+.price--sell-price.was-price, .price--rrp {
+  color: #777;
+  font-weight: 100;
+  text-decoration: line-through;
+}
+.price--discount-price {
+  color: #0074d9;
+}
+.tags {
+  display: block;
+  position: absolute;
+  z-index: 2;
+  text-align: right;
+  bottom: 6px;
+  right: 12px;
+}
+.tags > .availability {
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1;
+  padding: 4px 5px;
+  display: inline-block;
+  margin-left: 6px;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+}
+.tags > .availability.almost-gone {
+  background-color: #ff9600;
+}
+.tags > .availability.discount {
+  background-color: #0074d9;
+}
+.tags > .availability.sold-out {
+  background-color: #f00;
+}
+@import url(https://fonts.googleapis.com/css?family=Nunito:400,300,700);
+ * {
+	 -webkit-font-smoothing: antialiased;
+	 -moz-osx-font-smoothing: grayscale;
+	 box-sizing: border-box;
+}
+ nav {
+	 z-index: 999;
+	 width: 100%;
+	 height: 70px;
+	 background-color: #fff;
+	 line-height: 70px;
+}
+ nav .mini {
+	 position: fixed;
+	 top: 80px;
+	 right: 10px;
+	 background: #fff;
+	 padding: 40px;
+	 opacity: 0;
+	 visibility: hidden;
+	 transition: opacity 0.2s ease 0.2s;
+}
+ nav .mini.visible {
+	 padding: 40px;
+	 opacity: 1;
+	 visibility: visible;
+}
+ nav .mini .products {
+	 font-weight: bold;
+	 font-size: 14px;
+}
+ nav .mini p {
+	 font-size: 11px;
+	 display: block;
+	 margin: 0;
+	 padding: 0;
+	 line-height: 20px;
+}
+ nav .bi-cart {
+	 position: relative;
+	 float: right;
+	 margin-right: 50px;
+	 height: 20px;
+	 line-height: 70px;
+	 font-size: 28px;
+	 height: 100%;
+	 cursor: pointer;
+   color: black;
+}
+ nav .cart span {
+	 height: 100%;
+	 float: left;
+	 margin-right: 20px;
+	 color: black;
+	 font-size: 18px;
+	 font-family: 'Nunito', sans-serif;
+}
+ nav .cart span.updateQuantity:before, nav .cart span.updateQuantity:after {
+	 top: 0;
+	 bottom: 0;
+	 opacity: 1;
+	 width: 30px;
+	 transition: all 0.2s ease, top 0.3s ease 0.4s, bottom 0.3s ease 0.4s;
+}
+ nav .cart span.update {
+	 transition: color 0.2s ease 0.6s;
+	 color: #000;
+}
+ nav .cart span.update:before {
+	 top: -30px;
+	 width: 30px;
+	 opacity: 1;
+	 transition: all 0.2s ease, top 0.3s ease 0.4s, bottom 0.3s ease 0.4s;
+}
+ nav .cart span.update:after {
+	 top: 30px;
+	 width: 30px;
+	 opacity: 1;
+	 transition: all 0.2s ease, top 0.3s ease 0.4s, bottom 0.3s ease 0.4s;
+}
+ nav .cart span:before, nav .cart span:after {
+	 content: "";
+	 position: absolute;
+	 width: 0px;
+	 height: 2px;
+	 background-color: #0b0b0b;
+	 left: -10px;
+	 right: 40px;
+	 top: 2px;
+	 bottom: 0;
+	 margin: auto;
+}
+ nav ul {
+	 float: left;
+}
+ nav ul li {
+	 font-weight: bold;
+	 display: inline-block;
+	 margin-left: 50px;
+	 color: #0b0b0b;
+	 font-size: 12px;
+}
+ 
